@@ -11,7 +11,7 @@ from database import (save_alert, get_alerts, add_position, remove_position,
                       save_custom_alert, get_custom_alerts, delete_custom_alert,
                       get_untriggered_alerts, mark_alert_triggered,
                       save_investment_plan, get_latest_investment_plan)
-from config import WATCHLIST, WATCHLIST_CATEGORIES, CHECK_INTERVAL_MINUTES
+from config import WATCHLIST, WATCHLIST_CATEGORIES, CHECK_INTERVAL_MINUTES, APP_PASSWORD
 from simulator import simulate_investment
 from investment_plan import generate_investment_plan
 import yfinance as yf
