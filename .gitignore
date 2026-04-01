@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+.env
+financewatch.db
+/tmp/
+*.log

@@ -1,0 +1,11 @@
+import os
+
+FINNHUB_API_KEY = os.environ.get("FINNHUB_API_KEY", "")
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
+APP_PASSWORD = os.environ.get("APP_PASSWORD", "financewatch2024")
+
+WATCHLIST = ["AAPL", "TSLA", "AMZN", "MSFT", "BTC-USD"]
+CHECK_INTERVAL_MINUTES = 15
+ALERT_THRESHOLD = 7
