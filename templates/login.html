@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinanceWatch AI</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #0A0F1E; color: #fff;
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+}
+.card {
+  background: #111827; border: 1px solid #1e2a45;
+  border-radius: 20px; padding: 36px 28px;
+  width: 100%; max-width: 340px; text-align: center;
+}
+.logo { font-size: 1.4rem; font-weight: 800; color: #6366f1; margin-bottom: 6px; }
+.logo span { color: #a5b4fc; }
+.subtitle { font-size: .8rem; color: #64748b; margin-bottom: 28px; }
+.input {
+  width: 100%; padding: 13px 16px;
+  background: #1e2a45; border: 1px solid #2d3e5e;
+  border-radius: 12px; color: #fff; font-size: .9rem;
+  outline: none; margin-bottom: 14px;
+  text-align: center; letter-spacing: 2px;
+}
+.input:focus { border-color: #6366f1; }
+.btn {
+  width: 100%; padding: 13px;
+  background: #6366f1; color: white; border: none;
+  border-radius: 12px; font-size: .9rem; font-weight: 700;
+  cursor: pointer;
+}
+.btn:hover { background: #4f46e5; }
+.error { color: #ef4444; font-size: .8rem; margin-top: 12px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">Finance<span>Watch</span> AI</div>
+  <div class="subtitle">Ton mentor financier personnel</div>
+  <form method="POST">
+    <input class="input" type="password" name="password" placeholder="Mot de passe" autofocus>
+    <button class="btn" type="submit">Accéder →</button>
+  </form>
+  {% if error %}
+  <div class="error">{{ error }}</div>
+  {% endif %}
+</div>
+</body>
+</html>
