@@ -477,6 +477,15 @@ function switchTab(name) {
   if (name === 'plus') loadLecon();
 }
 
+// Ouvre l'onglet demandé via shortcut PWA (?tab=xxx)
+(function() {
+  var tabParam = new URLSearchParams(window.location.search).get('tab');
+  var validTabs = ['marches', 'decouvrir', 'analyses', 'mentor', 'portfolio', 'plus'];
+  if (tabParam && validTabs.indexOf(tabParam) !== -1) {
+    switchTab(tabParam);
+  }
+})();
+
 // RECHERCHE
 var searchTimeout = null;
 function onSearch(q) {

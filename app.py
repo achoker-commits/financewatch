@@ -175,6 +175,7 @@ def api_alerts_history():
     return jsonify(get_alerts(limit=50))
 
 @app.route('/api/check-now')
+@login_required
 def check_now():
     global latest_alerts
     results = check_all_symbols()
@@ -247,6 +248,7 @@ def api_portfolio_remove():
 # ── API RAPPORTS ───────────────────────────────────────────
 
 @app.route('/api/rapport-maintenant')
+@login_required
 def rapport_maintenant():
     envoyer_rapport_matinal()
     return jsonify({"status": "ok"})
@@ -496,17 +498,17 @@ def warm_cache():
     """Précalcule le cache au démarrage pour un chargement instantané."""
     import time
     time.sleep(2)
-    try:
-        cached('prices', get_all_prices, ttl=60)
-        cached('fear_greed', get_fear_and_greed, ttl=600)
-        def _get_lecon():
-            concept, lecon = get_lecon_du_jour()
-            return {"concept": concept, "lecon": lecon}
-        cached('lecon', _get_lecon, ttl=3600)
-        scheduled_check()
-        print("Cache précalculé — app prête !")
-    except Exception as e:
-        print(f"Erreur warm cache: {e}")
+    for name, fn in [
+        ("prices",     lambda: cached('prices', get_all_prices, ttl=60)),
+        ("fear_greed", lambda: cached('fear_greed', get_fear_and_greed, ttl=600)),
+        ("lecon",      lambda: cached('lecon', lambda: dict(zip(("concept", "lecon"), get_lecon_du_jour())), ttl=3600)),
+        ("alertes",    scheduled_check),
+    ]:
+        try:
+            fn()
+        except Exception as e:
+            print(f"Warm cache [{name}] ignoré: {e}")
+    print("FinanceWatch AI v4 — prêt !")
 
 if __name__ == '__main__':
     import threading

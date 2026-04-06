@@ -7,16 +7,59 @@
   "background_color": "#0A0F1E",
   "theme_color": "#6366f1",
   "orientation": "portrait",
+  "categories": ["finance", "productivity"],
+  "lang": "fr",
   "icons": [
     {
       "src": "/static/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/static/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Marchés",
+      "short_name": "Marchés",
+      "description": "Voir les prix en direct",
+      "url": "/?tab=marches",
+      "icons": [{ "src": "/static/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Alertes",
+      "short_name": "Alertes",
+      "description": "Mes alertes et analyses",
+      "url": "/?tab=alertes",
+      "icons": [{ "src": "/static/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Portefeuille",
+      "short_name": "Portfolio",
+      "description": "Mon portefeuille",
+      "url": "/?tab=portfolio",
+      "icons": [{ "src": "/static/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Mentor IA",
+      "short_name": "Mentor",
+      "description": "Poser une question au mentor",
+      "url": "/?tab=mentor",
+      "icons": [{ "src": "/static/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "FinanceWatch AI — Dashboard"
     }
   ]
 }
