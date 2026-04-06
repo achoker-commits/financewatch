@@ -32,7 +32,13 @@ WATCHLIST_CATEGORIES = {
     "Europe": [
         "LVMH.PA", "TTE.PA", "AIR.PA", "SAN.PA", "BNP.PA",
         "SAP.DE", "ASML.AS", "NESN.SW", "ROG.SW", "NOVN.SW",
-        "SIE.DE", "ALV.DE", "BMW.DE", "VOW3.DE"
+        "SIE.DE", "ALV.DE", "BMW.DE", "VOW3.DE",
+        "INGA.AS", "PHIA.AS", "HEIA.AS", "UNA.AS", "RDSA.AS"
+    ],
+    "BEL20": [
+        "ABI.BR", "AGS.BR", "APAM.BR", "ARGX.BR", "COLR.BR",
+        "ELI.BR", "GBLB.BR", "KBC.BR", "LOTB.BR", "PROX.BR",
+        "SOLB.BR", "UCB.BR", "WDP.BR", "BPOST.BR", "BELG.BR"
     ],
     "Chine": [
         "BABA", "NIO", "XPEV", "LI", "JD", "PDD", "BIDU",

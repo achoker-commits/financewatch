@@ -445,6 +445,30 @@ def api_delete_custom_alert(alert_id):
     delete_custom_alert(alert_id)
     return jsonify({"status": "ok"})
 
+# ── API PUSH NOTIFICATIONS ────────────────────────────────
+
+# Stockage en mémoire des subscriptions push (persiste tant que le serveur tourne)
+_push_subscriptions = []
+
+@app.route('/api/push/subscribe', methods=['POST'])
+@login_required
+def api_push_subscribe():
+    data = request.get_json()
+    sub = data.get('subscription')
+    if not sub:
+        return jsonify({"error": "Subscription manquante"}), 400
+    # Évite les doublons (basé sur l'endpoint)
+    endpoint = sub.get('endpoint', '')
+    _push_subscriptions[:] = [s for s in _push_subscriptions if s.get('endpoint') != endpoint]
+    _push_subscriptions.append(sub)
+    return jsonify({"status": "ok", "count": len(_push_subscriptions)})
+
+@app.route('/api/push/vapid-key')
+def api_push_vapid_key():
+    """Retourne la clé publique VAPID pour la souscription côté client."""
+    key = os.environ.get("VAPID_PUBLIC_KEY", "")
+    return jsonify({"key": key, "enabled": bool(key)})
+
 # ── API EXPORT PORTFOLIO CSV ───────────────────────────────
 
 @app.route('/api/portfolio/export')
@@ -486,7 +510,7 @@ def warm_cache():
 
 if __name__ == '__main__':
     import threading
-    print("FinanceWatch AI v3 — Edition Complète")
+    print("FinanceWatch AI v4 — Edition Complète")
     print("Dashboard : http://localhost:5000")
     threading.Thread(target=warm_cache, daemon=True).start()
     app.run(debug=False, host='0.0.0.0', port=5000)

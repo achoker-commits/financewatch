@@ -209,6 +209,7 @@ nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:rgba(1
         <button class="cat-tab" onclick="loadCategory('Crypto',this)">Crypto</button>
         <button class="cat-tab" onclick="loadCategory('ETF',this)">ETF</button>
         <button class="cat-tab" onclick="loadCategory('Europe',this)">Europe</button>
+        <button class="cat-tab" onclick="loadCategory('BEL20',this)">BEL20 🇧🇪</button>
         <button class="cat-tab" onclick="loadCategory('Tendance',this)">Tendance</button>
         <button class="cat-tab" onclick="loadCategory('Chine',this)">Chine</button>
       </div>
@@ -579,6 +580,7 @@ function loadFearGreed() {
 }
 
 function selectSymbol(sym, el) {
+  haptic('light');
   document.querySelectorAll('.price-card').forEach(function(c) { c.classList.remove('active'); });
   if (el) el.classList.add('active');
   selectedSymbol = sym;
@@ -819,6 +821,7 @@ function createCustomAlert() {
     method: 'POST', headers: {'Content-Type':'application/json'},
     body: JSON.stringify({symbol: sym, condition: cond, target_price: price})
   }).then(function() {
+    haptic('success');
     document.getElementById('ca-symbol').value = '';
     document.getElementById('ca-price').value = '';
     loadCustomAlerts();
@@ -1018,9 +1021,71 @@ function sendRapport() {
   fetch('/api/rapport-maintenant').then(function() { alert('Rapport envoye sur Telegram !'); });
 }
 
-// PWA
+// PWA + Push Notifications
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/static/sw.js');
+  navigator.serviceWorker.register('/static/sw.js').then(function(reg) {
+    // Demande push notifications après 3 secondes (non intrusif)
+    setTimeout(function() { initPushNotifications(reg); }, 3000);
+  });
+}
+
+function initPushNotifications(reg) {
+  if (!('PushManager' in window)) return;
+  // Vérifie si VAPID key est configurée
+  fetch('/api/push/vapid-key').then(function(r) { return r.json(); }).then(function(d) {
+    if (!d.enabled) return; // Pas de clé VAPID configurée, skip
+    if (Notification.permission === 'granted') {
+      subscribePush(reg, d.key);
+    } else if (Notification.permission === 'default') {
+      // Montre un toast d'invitation discret
+      showPushInvite(reg, d.key);
+    }
+  }).catch(function() {});
+}
+
+function showPushInvite(reg, vapidKey) {
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:76px;left:12px;right:12px;background:#1e2a45;border:1px solid #4338ca;border-radius:12px;padding:12px 14px;z-index:100;display:flex;align-items:center;gap:10px;font-size:.82rem';
+  var txt = document.createElement('span');
+  txt.textContent = 'Activer les alertes prix en temps réel ?';
+  txt.style.flex = '1';
+  var btnOui = document.createElement('button');
+  btnOui.textContent = 'Oui';
+  btnOui.style.cssText = 'background:#6366f1;color:white;border:none;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:.8rem;font-weight:700';
+  var btnNon = document.createElement('button');
+  btnNon.textContent = '✕';
+  btnNon.style.cssText = 'background:none;border:none;color:#64748b;cursor:pointer;font-size:1rem;padding:4px';
+  btnOui.onclick = function() {
+    toast.remove();
+    Notification.requestPermission().then(function(perm) {
+      if (perm === 'granted') subscribePush(reg, vapidKey);
+    });
+  };
+  btnNon.onclick = function() { toast.remove(); };
+  toast.appendChild(txt); toast.appendChild(btnOui); toast.appendChild(btnNon);
+  document.body.appendChild(toast);
+  setTimeout(function() { if (toast.parentNode) toast.remove(); }, 8000);
+}
+
+function subscribePush(reg, vapidKey) {
+  try {
+    var key = Uint8Array.from(atob(vapidKey.replace(/-/g,'+').replace(/_/g,'/')), function(c) { return c.charCodeAt(0); });
+    reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key }).then(function(sub) {
+      fetch('/api/push/subscribe', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ subscription: sub.toJSON() })
+      });
+    }).catch(function() {});
+  } catch(e) {}
+}
+
+// Haptic feedback sur actions importantes (fonctionne en PWA installée)
+function haptic(type) {
+  if (!navigator.vibrate) return;
+  if (type === 'light') navigator.vibrate(10);
+  else if (type === 'success') navigator.vibrate([30, 50, 30]);
+  else if (type === 'alert') navigator.vibrate([100, 50, 100, 50, 200]);
 }
 
 // INIT
