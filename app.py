@@ -130,7 +130,12 @@ def logout():
 @app.route('/')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', watchlist=WATCHLIST)
+    from flask import make_response
+    resp = make_response(render_template('dashboard.html', watchlist=WATCHLIST))
+    resp.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    resp.headers['Pragma'] = 'no-cache'
+    resp.headers['Expires'] = '0'
+    return resp
 
 # ── API MARCHÉS ────────────────────────────────────────────
 
