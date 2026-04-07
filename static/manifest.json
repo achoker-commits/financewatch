@@ -35,7 +35,7 @@
       "name": "Alertes",
       "short_name": "Alertes",
       "description": "Mes alertes et analyses",
-      "url": "/?tab=alertes",
+      "url": "/?tab=analyses",
       "icons": [{ "src": "/static/icon-192.png", "sizes": "192x192" }]
     },
     {

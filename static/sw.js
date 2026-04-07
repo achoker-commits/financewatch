@@ -1,5 +1,5 @@
 // Version à incrémenter à chaque déploiement pour forcer la mise à jour sur mobile
-const CACHE_VERSION = 'financewatch-v5';
+const CACHE_VERSION = 'financewatch-v6';
 const ASSETS = ['/', '/static/manifest.json'];
 
 // Installation : mise en cache des assets de base
